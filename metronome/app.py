@@ -6,8 +6,8 @@ from .api import MetronomeAPI
 def main():
     api = MetronomeAPI()
 
-    ui_path = os.path.join(os.path.dirname(__file__), '..', 'ui', 'index.html')
-    ui_path = os.path.abspath(ui_path)
+    resources = os.environ.get('METRONOME_RESOURCES', os.path.join(os.path.dirname(__file__), '..', '..'))
+    ui_path = os.path.abspath(os.path.join(resources, 'ui', 'index.html'))
 
     window = webview.create_window(
         title='Metronome',
