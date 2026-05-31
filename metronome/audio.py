@@ -65,7 +65,11 @@ class AudioEngine:
         outdata[:, 0] = mixed
 
     def play(self, beat_type: str, preset: str, volume: float) -> None:
-        buf = self._buffers.get(preset, self._buffers['click']).get(beat_type, self._buffers['click']['beat'])
+        click = self._buffers.get('click', {})
+        preset_bufs = self._buffers.get(preset, click)
+        buf = preset_bufs.get(beat_type, click.get('beat'))
+        if buf is None:
+            return
         with self._lock:
             self._active.append([(buf * volume).astype(np.float32), 0])
 
@@ -77,6 +81,8 @@ class AudioEngine:
 
     def _window(self, buf: np.ndarray) -> np.ndarray:
         fade = min(64, len(buf) // 4)  # 64 samples ≈ 1.5ms
+        if fade == 0:
+            return buf
         buf[:fade] *= np.linspace(0.0, 1.0, fade, dtype=np.float32)
         buf[-fade:] *= np.linspace(1.0, 0.0, fade, dtype=np.float32)
         return buf

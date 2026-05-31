@@ -30,6 +30,12 @@ class MetronomeEngine:
         self._stop_event.set()
         if self._thread:
             self._thread.join(timeout=2.0)
+            # If the thread is somehow still alive after the timeout, clear the
+            # reference anyway so start() can spawn a fresh thread.  The zombie
+            # thread will exit on its own once it next checks _stop_event.
+            if self._thread.is_alive():
+                import logging
+                logging.warning("MetronomeEngine: thread did not stop within 2 s")
             self._thread = None
 
     def set_bpm(self, bpm: float) -> None:
@@ -43,7 +49,7 @@ class MetronomeEngine:
 
     def set_subdivision(self, subdivision: int) -> None:
         with self._lock:
-            self._subdivision = subdivision
+            self._subdivision = max(1, int(subdivision))
 
     def _run(self) -> None:
         sub_count = 0

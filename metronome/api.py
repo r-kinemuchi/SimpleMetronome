@@ -106,6 +106,8 @@ class MetronomeAPI:
 
     def tap_tempo(self) -> dict:
         now = time.monotonic()
+        with self._lock:
+            current_bpm = self._bpm
         with self._tap_lock:
             if self._tap_times and (now - self._tap_times[-1]) > 2.0:
                 self._tap_times.clear()
@@ -113,13 +115,11 @@ class MetronomeAPI:
             if len(self._tap_times) > 9:
                 self._tap_times = self._tap_times[-9:]
             if len(self._tap_times) < 2:
-                with self._lock:
-                    return {'bpm': self._bpm}
+                return {'bpm': current_bpm}
             intervals = [self._tap_times[i] - self._tap_times[i - 1]
                          for i in range(1, len(self._tap_times))]
             avg = sum(intervals) / len(intervals)
             bpm = max(30.0, min(300.0, 60.0 / avg))
-
         result = self.set_bpm(bpm)
         return result
 
