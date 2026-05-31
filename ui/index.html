@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metronome</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="app-title">METRONOME</header>
+
+    <section id="beat-indicators" class="beat-indicators"></section>
+
+    <section class="bpm-section">
+      <div class="bpm-display" id="bpm-display">120</div>
+      <div class="bpm-label">BPM</div>
+      <div class="bpm-slider-row">
+        <input type="range" id="bpm-slider" min="30" max="300" value="120" step="1">
+      </div>
+      <div class="bpm-buttons">
+        <button class="btn-icon" id="btn-dec">−</button>
+        <input type="number" class="bpm-input" id="bpm-input" min="30" max="300" value="120">
+        <button class="btn-icon" id="btn-inc">+</button>
+      </div>
+    </section>
+
+    <section class="volume-section">
+      <span class="volume-icon">
+        <svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8.5h3l4-3.5v12l-4-3.5H4z" fill="currentColor"/>
+          <path d="M14 8c1 .8 1 5.2 0 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M16.5 6c2 1.6 2 8.4 0 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <input type="range" id="volume-slider" min="0" max="100" value="70" step="1">
+    </section>
+
+    <section class="selectors">
+      <div class="selector-row">
+        <label>拍子</label>
+        <select id="time-sig-select">
+          <option value="2/4">2/4</option>
+          <option value="3/4">3/4</option>
+          <option value="4/4" selected>4/4</option>
+          <option value="6/8">6/8</option>
+        </select>
+      </div>
+      <div class="selector-row">
+        <label>分割</label>
+        <select id="subdivision-select">
+          <option value="1" selected>4分</option>
+          <option value="2">8分</option>
+          <option value="3">3連符</option>
+          <option value="4">16分</option>
+        </select>
+      </div>
+      <div class="selector-row">
+        <label>音色</label>
+        <select id="sound-select">
+          <option value="beep">Beep</option>
+          <option value="click" selected>Click</option>
+          <option value="wood">Wood</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="transport">
+      <button class="btn-play" id="btn-play">▶ START</button>
+      <button class="btn-tap" id="btn-tap">T A P</button>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
