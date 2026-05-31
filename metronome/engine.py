@@ -50,6 +50,7 @@ class MetronomeEngine:
     def set_subdivision(self, subdivision: int) -> None:
         with self._lock:
             self._subdivision = max(1, int(subdivision))
+            self._reset_pending = True
 
     def _run(self) -> None:
         sub_count = 0
@@ -84,3 +85,7 @@ class MetronomeEngine:
 
             sub_count += 1
             next_time += sub_interval
+            # Prevent timing debt from accumulating; skip ahead if we've
+            # fallen behind by more than one interval (e.g. after system load).
+            if next_time < time.perf_counter():
+                next_time = time.perf_counter()
